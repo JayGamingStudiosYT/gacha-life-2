@@ -1,0 +1,3 @@
+The Character's Pose will change.
+--- RECORDSEPARATOR ---
+Will you change the pose?

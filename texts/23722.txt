@@ -1,0 +1,5 @@
+사전
+--- RECORDSEPARATOR ---
+ 
+--- RECORDSEPARATOR ---
+설정

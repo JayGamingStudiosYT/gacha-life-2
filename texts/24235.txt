@@ -1,0 +1,3 @@
+The selected preset will replace the
+--- RECORDSEPARATOR ---
+current character. Continue?

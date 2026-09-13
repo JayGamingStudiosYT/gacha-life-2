@@ -1,0 +1,9 @@
+# OS / editor junk only — keep the decompiled tree intact
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo

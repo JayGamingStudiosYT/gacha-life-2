@@ -1,0 +1,5 @@
+(
+--- RECORDSEPARATOR ---
+ハモおた
+--- RECORDSEPARATOR ---
+)

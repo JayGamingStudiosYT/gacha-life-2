@@ -1,0 +1,3 @@
+Your current character will be
+--- RECORDSEPARATOR ---
+randomized. Continue?
