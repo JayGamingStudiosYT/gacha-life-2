@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:ffdec="https://www.free-decompiler.com/flash" xmlns:xlink="http://www.w3.org/1999/xlink" ffdec:objectType="shape" height="209.6px" width="501.25px" xmlns="http://www.w3.org/2000/svg">
+  <g transform="matrix(1.0, 0.0, 0.0, 1.0, 250.6, 111.45)">
+    <path d="M-235.6 -111.45 L235.65 -111.45 Q250.65 -111.45 250.65 -96.45 L250.65 83.15 Q250.65 98.15 235.65 98.15 L-235.6 98.15 Q-250.6 98.15 -250.6 83.15 L-250.6 -96.45 Q-250.6 -111.45 -235.6 -111.45" fill="#16143e" fill-opacity="0.69803923" fill-rule="evenodd" stroke="none"/>
+    <path d="M-165.4 -23.45 L163.8 -23.45 Q175.8 -23.45 175.8 -11.45 L175.8 75.05 Q175.8 87.05 163.8 87.05 L-165.4 87.05 Q-177.4 87.05 -177.4 75.05 L-177.4 -11.45 Q-177.4 -23.45 -165.4 -23.45" fill="url(#gradient0)" fill-rule="evenodd" stroke="none"/>
+    <path d="M-165.4 -23.45 L163.8 -23.45 Q175.8 -23.45 175.8 -11.45 L175.8 75.05 Q175.8 87.05 163.8 87.05 L-165.4 87.05 Q-177.4 87.05 -177.4 75.05 L-177.4 -11.45 Q-177.4 -23.45 -165.4 -23.45 Z" fill="none" stroke="#314076" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.0"/>
+  </g>
+  <defs>
+    <linearGradient gradientTransform="matrix(0.0, -0.0674, 0.2156, 0.0, -0.8, 31.8)" gradientUnits="userSpaceOnUse" id="gradient0" spreadMethod="pad" x1="-819.2" x2="819.2">
+      <stop offset="0.0" stop-color="#eaf1ff"/>
+      <stop offset="1.0" stop-color="#fbfeff"/>
+    </linearGradient>
+  </defs>
+</svg>
