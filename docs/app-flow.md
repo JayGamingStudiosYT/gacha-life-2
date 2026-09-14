@@ -1,66 +1,59 @@
 # Application flow
 
-Gacha Life 2 in this dump is **one root MovieClip** (`MainTimeline`) with labeled frames as “scenes”. Nested clips (`custx`, `gachamain`, studio UI) have their own timelines.
+The product is one root `MovieClip` (`MainTimeline`) with labeled frames as screens. Nested clips (`custx`, gacha, studio) have their own timelines.
 
 ```
 boot
-  → loaddata / load     local save, ads SDK init
+  → loaddata / load     local save, ads SDK
   → title               intro, terms, options
-  → home                hub (bottom bar)
-       ├─ customizer    custx (body / pose / colors / assets / …)
-       ├─ gacha         gacha + gachaani
+  → home                hub
+       ├─ customizer    custx
+       ├─ gacha         gacha / gachaani
        ├─ collection
        ├─ featuredchars
        ├─ life
-       └─ studio        movie / posing / text tools
+       └─ studio
 ```
 
 ## Boot
 
-`MainTimeline` constructor registers frame scripts, then early frames:
+The constructor registers frame scripts. Early frames run fade and logo (`fadexx`, `logox`, Lunime intro), then `gotoAndStop("loaddata")`, then `"title"` or `"load"` depending on save data and `reachend` on the title clip.
 
-- fade / logo (`fadexx`, `logox`, lunime intro clip)
-- `gotoAndStop("loaddata")` then `"title"` or `"load"` depending on save and `reachend` on the title animation
+`titlescreen_16` plays the intro and sets `parent.reachend = 2`. Terms and options are sibling clips driven from `MainTimeline`.
 
-`titlescreen_16` only runs the titleloop and sets `parent.reachend = 2` when the intro finishes. Policy/options on title are sibling clips (`termconditions_89`, options MovieClips) scripted from `MainTimeline`.
+## Hub
 
-## Home hub
+`gotoAndStop("home")`. The bottom bar and `changebt` select modes:
 
-`gotoAndStop("home")`. Bottom bar and `changebt` switch modes. The same function family maps:
-
-| Label | Player-facing area |
+| Label | Area |
 | --- | --- |
 | `home` | Hub / rooms |
 | `gacha` | Summon |
-| `collection` | Saved / collected OC list |
+| `collection` | Collected characters |
 | `featuredchars` | Featured characters |
-| `life` | Life / storylet mode |
-| `studio` | Posing, props, text, export-oriented UI |
+| `life` | Life mode |
+| `studio` | Posing, props, text |
 
 Fades: `fadex.gotoAndPlay("fadein" | "gfadein" | "fadeout")`.
 
 ## Customizer
 
-Not a root frame named `customizer`. The hub shows `custx` (`customizer_468`). `MainTimeline` sets:
+There is no root frame named `customizer`. The hub hosts `custx` (`customizer_468`):
 
 `custx.gotoAndStop("presets" | "body" | "pose" | "more" | "profile" | "itempick" | "adjust" | "colors" | "importexport" | "assets")`
 
-The live preview is `char` / `chara`: nested parts (`head`, shirts, shoes, …) whose classes sit next to `shirtc1_283.as` etc.
-
-Undo, zoom, copy-color, tint-all are dedicated clips (`undobuton_480`, `zoomfeature_477`, `copycoloros_487`, `tintselall_554`) parented under the customizer sprite.
+Preview is `char` (`chara`) with nested parts (`shirtc1_283` and similar). Undo, zoom, copy-color, and tint-all are child clips (`undobuton_480`, `zoomfeature_477`, `copycoloros_487`, `tintselall_554`).
 
 ## Gacha
 
-Root frames `gacha` and `gachaani`. Related clips: summon button, result buttons, `talismanga_710`, star/logo animations. `gachas["gachax" + i]` is an array-style set of result slots on the timeline.
+Frames `gacha` and `gachaani`. Related clips include the summon button, results, and `talismanga_710`. Result slots are `gachas["gachax" + i]`.
 
 ## Studio
 
-Root frame `studio`. `studioadjuster_756` plus `studiodownui_731`, movement blockers, text mode (`textmodep_768`), props page, pose picker. Characters on the stage are still `chara` instances.
+Frame `studio`. `studioadjuster_756`, `studiodownui_731`, text mode (`textmodep_768`), props, and pose picker. Characters remain `chara` instances.
 
-## Data
+## Persistence and ads
 
-Look in `MainTimeline` for `SharedObject`, `URLLoader`, `File`, or string packs named like `updatedatax_686` / `updatedatabt_673` — those names are the update/news and remote data entry points. Character slots are timeline + SharedObject style storage, not a separate SQL folder in this dump.
+In `MainTimeline`, look for `SharedObject`, `URLLoader`, `File`, `updatedatax_686`, and `updatedatabt_673` for save and remote data. There is no separate database folder in this export.
 
-## Ads
-
-Distriqt `adverts` / `RewardedVideoAd` at the top of `MainTimeline.as`. Clips like `watchvideox_646` / `watchuppop_464` are the UI around rewarded video, not the ad SDK itself.
+Distriqt `adverts` / `RewardedVideoAd` is the ad SDK. `watchvideox_646` and `watchuppop_464` are the surrounding UI.

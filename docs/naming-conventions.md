@@ -1,6 +1,6 @@
 # Naming conventions
 
-Decompilers glue **library name**, **AS3 class**, and **SWF character ID**. Once you parse one name, the rest of the tree matches.
+Each library item has a **class name**, a **SWF character ID**, and often an Animate **instance name**. They join as follows.
 
 ## Script files: `name_NNN.as`
 
@@ -15,39 +15,39 @@ titlescreen_16.as
 
 | Piece | Meaning |
 | --- | --- |
-| `customizer` | Instance / library name from Animate (often typos: `tittlefeatued`, `deletleall`). |
-| `_468` | Script / sprite linkage ID used in the FLA timeline (not the same as SWF character ID). |
+| `customizer` | Library / instance name (spellings are as in the FLA: `tittlefeatued`, `deletleall`). |
+| `_468` | Timeline linkage id in the FLA. **Not** the SWF character ID. |
 
-The **SWF character ID** is in the `[Embed]` line:
+The SWF character ID is on the embed:
 
 ```as
 [Embed(source="/_assets/assets.swf", symbol="symbol24831")]
 public dynamic class customizer_468 extends MovieClip
 ```
 
-So: class `customizer_468` ↔ embed symbol **24831** ↔ folder `sprites/DefineSprite_24831_GL2_fla.customizer_468/`.
+Mapping: class `customizer_468` ↔ symbol **24831** ↔ `sprites/DefineSprite_24831_GL2_fla.customizer_468/`.
 
-## Color / part suffixes: `c1` … `c5`
+## Recolor layers: `c1` … `c5`
 
-Avatar parts are split by **color channel or variant**:
+Avatar parts are split by color layer, not by “chapter”:
 
-- `shirtc1_283` … `shirtc5_285` — shirt layers
-- `ahogec1_413` … `ahogec4_417` — ahoge color slots
+- `shirtc1_283` … `shirtc5_285`
+- `ahogec1_413` … `ahogec4_417`
 - `wingsc1_158` … `wingsc5_160`
 
-`c1`–`c5` are the same item’s recolor layers, not “chapter 1–5”. Parent clips (`shirtc1`’s container) usually have a shorter name (`alllogoshirt_289`, `wingwing_157`).
+Containers often use a doubled stem (`headhead_326`, `wingwing_157`).
 
-## Sprite folders: `DefineSprite_<id>_…`
+## Sprite folders
 
 ```
 DefineSprite_24831_GL2_fla.customizer_468
-DefineSprite_22578          (if unnamed in CSV you still have the id)
+DefineSprite_23103
 ```
 
-- `DefineSprite_` — tag type.
-- First number — SWF character ID (same as `symbolNNNNN` and CSV column 1).
-- `GL2_fla.` — package.
-- Rest — class / instance name.
+- `DefineSprite_` — tag type  
+- First number — SWF character ID (same as `symbolNNNNN` and column 1 of `symbols.csv`)  
+- `GL2_fla.` — package, when present  
+- Remainder — class / instance name  
 
 ## `symbols.csv`
 
@@ -56,19 +56,19 @@ DefineSprite_22578          (if unnamed in CSV you still have the id)
 22578;"chara"
 ```
 
-Quoted names may include the package. Default-package clips (`chara`, `stars`, `cloud`) have **no** `GL2_fla.` prefix and live as `scripts/chara.as`, not under `GL2_fla/`.
+Default-package clips (`chara`, `stars`, `cloud`) live as `scripts/chara.as`, not under `GL2_fla/`.
 
-## Typos and doubled words
+## Spellings
 
-Export names are Animate instance names, often with doubled stems:
+Instance names are preserved, including errors. Do not rename them in this dump; linkage will break.
 
-| You see | Read as |
+| Export name | Meaning |
 | --- | --- |
-| `headhead_326` | inner head graphic inside `head_325` |
-| `ahogeahoge_412` | nested ahoge |
-| `tailtail_148`, `wingwing_157` | nested part |
-| `fadeouut_13`, `deletleall_80` | misspelled instance names; do not “fix” them in this dump or linkage breaks |
+| `headhead_326` | Inner head graphic under `head_325` |
+| `ahogeahoge_412` | Nested ahoge |
+| `tailtail_148`, `wingwing_157` | Nested part |
+| `fadeouut_13`, `deletleall_80` | Misspelled instance names |
 
-## Texts and shapes: number = ID
+## Numeric text and shape files
 
-`texts/26048.txt` is text tag **26048**, not line 26048 of a script. Cross-check ID in the sprite that contains that text, or in JPEXS if you still have the SWF.
+`texts/26048.txt` is text tag **26048**. Confirm the ID in `symbols.csv` or in the parent sprite.

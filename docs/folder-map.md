@@ -1,71 +1,66 @@
 # Folder map
 
-Every top-level directory is a **SWF tag family** from the decompiler, not an app feature folder (`ui/`, `game/`, etc.). Feature names live *inside* script and sprite **class names**.
+Top-level directories are **SWF tag families**, not application features (`ui/`, `game/`). Feature names appear in class and instance names inside those folders.
 
 ## `scripts/`
 
-ActionScript 3 recovered from ABC (DoABC) tags.
+ActionScript 3 recovered from ABC tags.
 
 | Path | Role |
 | --- | --- |
-| `scripts/GL2_fla/` | Document package. Almost all named clips (`customizer_468`, `shirtc1_283`, …). |
-| `scripts/GL2_fla/MainTimeline.as` | Root `MovieClip` — save/load, navigation, gacha, ads (Distriqt), customizer orchestration. |
-| `scripts/*.as` (root of `scripts/`) | Default-package types: `chara`, `chata`, `emotea`, `Font6`–style font classes. |
-| `scripts/_assets/assets.swf` | Binary the compiler used for `[Embed(..., symbol="symbolNNNNN")]`. Keep next to scripts. |
+| `scripts/GL2_fla/` | Document package. Named clips (`customizer_468`, `shirtc1_283`, and similar). |
+| `scripts/GL2_fla/MainTimeline.as` | Root `MovieClip`: save/load, navigation, gacha, ads (Distriqt), customizer. |
+| `scripts/*.as` (package root) | Default-package types: `chara`, `chata`, `emotea`, font classes. |
+| `scripts/_assets/assets.swf` | Binary referenced by `[Embed(..., symbol="symbolNNNNN")]`. Required. |
 
-A clip with a script is **not** always where gameplay lives. Example: `titlescreen_16.as` only plays intro frames and sets `parent.reachend`. Title *flow* is in `MainTimeline`.
+A file under `scripts/` does not always own the feature. `titlescreen_16.as` only plays intro frames and sets `parent.reachend`. Title **flow** is in `MainTimeline`.
 
 ## `sprites/`
 
-One folder per **DefineSprite** (a MovieClip in the library).
+One folder per **DefineSprite** (library MovieClip).
 
-Typical name:
+```
+DefineSprite_<characterId>_GL2_fla.<instanceName>_<timelineScriptId>/
+```
 
-`DefineSprite_<characterId>_GL2_fla.<instanceName>_<timelineScriptId>/`
+Example: `DefineSprite_24831_GL2_fla.customizer_468` is the visual tree for `customizer_468` (symbol 24831). Unnamed clips are `DefineSprite_<id>` only.
 
-Example: `DefineSprite_24831_GL2_fla.customizer_468` is the visual tree for class `customizer_468` (symbol 24831). Inside: nested SVG/PNG/XML per frame and child.
-
-Unnamed clips look like `DefineSprite_23103` (ID only).
-
-This directory is most of the bytes. Browse by **ID from `symbols.csv` or the `[Embed] symbol=` number**, not by walking all 800 folders.
+This directory is most of the bytes. Resolve IDs from `symbols.csv` or `[Embed]`, then open that folder. Do not browse all ~800 folders by hand.
 
 ## `shapes/`
 
-**DefineShape** exports, usually `NNNN.svg`. IDs match SWF characters. Sprites **compose** these shapes. Edit here only if you are inspecting a single outline; the game references them by ID through sprites.
+**DefineShape** exports, typically `NNNN.svg`. Sprites compose these outlines. Inspect a single SVG only when you already have the ID.
 
 ## `images/`
 
-Bitmap tags (`DefineBits`, JPEG, PNG). Referenced from sprites/shapes. Filenames are tag IDs.
+Bitmap tags. Filenames are tag IDs.
 
-## `fonts/` + `scripts/Font*.as`
+## `fonts/` and `scripts/Font*.as`
 
-TTF on disk; `Font*.as` wraps them with `[Embed(source="/_assets/….ttf", fontName=…, unicodeRange=…)]`. `unicodeRange` is huge (Latin + CJK) — that is why font classes look unreadable. The TTF in `fonts/` is the actual face.
+TTF files on disk. `Font*.as` registers them with `[Embed]` and a large `unicodeRange` (Latin and CJK). The face is the TTF, not the range string.
 
 ## `texts/`
 
-**DefineText / DefineEditText** payloads. One `.txt` per text ID (`88.txt` is character 88, which may be a UI string like `Hi~!`). Not dialogue scripts. Runtime copy is often set in AS3 (`TextField` on clips).
+DefineText / DefineEditText payloads. `88.txt` is character **88**, not “line 88 of a script.” Runtime copy is often assigned in ActionScript.
 
 ## `sounds/`
 
-DefineSound tags (SFX / BGM snippets).
+DefineSound tags.
 
 ## `frames/`
 
-Frame-level extras the decompiler split out (labels, frame scripts as data). Scene **names** you care about are still the `gotoAndStop("home")` strings in `MainTimeline.as`.
+Frame extras from the decompiler. Scene names used in code are the `gotoAndStop("home")` labels in `MainTimeline.as`.
 
 ## `movies/` and `morphshapes/`
 
-DefineSprite-as-movie and DefineMorphShape. May be empty in this export.
+May be empty in this export. Git does not store empty directories.
 
 ## `symbolClass/`
 
-`symbols.csv` maps:
+`symbols.csv` format:
 
 ```
 <characterId>;"package.ClassName"
 ```
 
-Example: `22578;"chara"` → `scripts/chara.as` and embed `symbol22578`.  
-`24831` → `GL2_fla.customizer_468`.
-
-Use this file as the **index** when a sprite folder name is truncated or numeric-only.
+Examples: `22578;"chara"` → `scripts/chara.as`; `24831` → `GL2_fla.customizer_468`. Use this file when a sprite folder name is numeric-only.

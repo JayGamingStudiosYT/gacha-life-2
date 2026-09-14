@@ -1,74 +1,74 @@
-# Gacha Life 2 — source archive
+# Gacha Life 2 — internal source archive
 
-Private archive of the **Gacha Life 2** Flash / AIR dump for Lunime developers.
+**Classification:** Lunime confidential  
+**Access:** Authorized staff and contractors only  
+**Status:** Private GitHub repository — do not fork, mirror, or redistribute
 
-This tree is **not** a typical `src/` project. It is a **JPEXS / FFDec-style export**: every SWF tag (script, sprite, shape, font, sound, text) is a file or folder. Layout matches the decompiler export. Do not rename or nest these folders if you want IDs to stay aligned with the original SWF.
+This tree is a **decompiler export** of the shipped Adobe AIR / Flash SWF (JPEXS / FFDec layout). It is maintained for engineering review, tooling, and historical reference. It is **not** an Adobe Animate project and cannot be published with File → Publish.
 
-**Start here**
+Keep the folder layout. Numeric names are SWF **character IDs**, not feature numbers. Renaming or collapsing directories (especially `sprites/`) breaks the mapping between scripts, embeds, and art.
 
-| Doc | What it answers |
+## Documentation
+
+| Document | Contents |
 | --- | --- |
-| [docs/folder-map.md](docs/folder-map.md) | What each top-level folder is |
-| [docs/naming-conventions.md](docs/naming-conventions.md) | How `customizer_468` and `DefineSprite_24831_…` names work |
-| [docs/scripts-guide.md](docs/scripts-guide.md) | Which `.as` files matter and where logic lives |
-| [docs/app-flow.md](docs/app-flow.md) | Title → home → customizer / gacha / studio |
-| [docs/reading-decompiled-flash.md](docs/reading-decompiled-flash.md) | How to read this dump without Flash Builder |
+| [docs/README.md](docs/README.md) | Index of all guides |
+| [docs/getting-started.md](docs/getting-started.md) | Five-minute orientation |
+| [docs/folder-map.md](docs/folder-map.md) | Top-level directories |
+| [docs/naming-conventions.md](docs/naming-conventions.md) | Class names, symbol IDs, `c1`–`c5` layers |
+| [docs/scripts-guide.md](docs/scripts-guide.md) | Primary ActionScript files |
+| [docs/app-flow.md](docs/app-flow.md) | Boot, hub, customizer, gacha, studio |
+| [docs/working-with-the-archive.md](docs/working-with-the-archive.md) | Search, decompiled AS3, rebuild limits |
+| [NOTICE](NOTICE) | Copyright and access |
 
-Decompiled ActionScript is verbose (wildcard imports, `dynamic` classes, timeline frame scripts). Treat `MainTimeline.as` as the app, clip classes as UI skins with optional scripts.
-
----
-
-## Top-level folders (quick)
+## Directory overview
 
 ```
-fonts/         Embedded TTF files referenced by Font*.as
-frames/        Timeline / frame tag exports
-images/        Bitmaps (JPEG/PNG/GIF) from DefineBits tags
-morphshapes/   Shape tweens (often empty)
-movies/        Nested SWF / DefineSprite movie tags (often empty)
-scripts/       ActionScript 3 (readable logic)
-  GL2_fla/     Almost all game/UI classes (document package)
-  _assets/     Packed assets.swf used by [Embed] metadata
-shapes/        Vector outlines (SVG), one file per shape ID
-sounds/        Audio tags
-sprites/       DefineSprite folders (bulk of the archive ~6 GB)
-symbolClass/   symbols.csv — SWF character ID ↔ class name
-texts/         Static DefineText strings (one .txt per text ID)
+fonts/          Embedded typefaces (TTF)
+frames/         Frame / label exports
+images/         Bitmap tags
+morphshapes/    Morph-shape tags (may be empty)
+movies/         Nested movie tags (may be empty)
+scripts/        ActionScript 3
+  GL2_fla/      Document package (game and UI classes)
+  _assets/      assets.swf required by [Embed] metadata
+shapes/         Vector outlines (SVG), one file per shape ID
+sounds/         Audio tags
+sprites/        DefineSprite folders (majority of the archive)
+symbolClass/    symbols.csv — character ID to class name
+texts/          Static text tags
 ```
 
-Numeric filenames (`shapes/10001.svg`, `texts/88.txt`) are **SWF character IDs**, not “chapter 88”.
+## Primary entry points
 
----
-
-## Fast paths for developers
-
-- **App entry / scene machine:** `scripts/GL2_fla/MainTimeline.as` (~37k lines). Frame labels include `loaddata`, `title`, `load`, `home`, `gacha`, `studio`, `collection`, `life`, `featuredchars`.
-- **Character creator UI:** `scripts/GL2_fla/customizer_468.as` — class for symbol `24831`. Matching art: `sprites/DefineSprite_24831_GL2_fla.customizer_468/`.
-- **Color UI:** `scripts/GL2_fla/colorpicker_594.as`.
-- **Studio transform UI:** `scripts/GL2_fla/studioadjuster_756.as`.
-- **On-stage character / chat / emote clips:** `scripts/chara.as`, `scripts/chata.as`, `scripts/emotea.as` (default package, not `GL2_fla`).
-- **Name lookup:** `symbolClass/symbols.csv` (`id;"package.ClassName"`).
-
----
-
-## Size
-
-Rough scale of this dump:
-
-| Area | Scale |
+| Area | Location |
 | --- | --- |
-| `sprites/` | ~6 GB, ~800 sprite folders, tens of thousands of files |
-| `shapes/` | ~1 GB, ~23k SVG files |
-| `scripts/` | ~90 MB, ~440 `.as` files + `assets.swf` (~75 MB) |
+| Application / scene graph | `scripts/GL2_fla/MainTimeline.as` |
+| Character creator | `scripts/GL2_fla/customizer_468.as` (symbol `24831`) |
+| Color picker | `scripts/GL2_fla/colorpicker_594.as` |
+| Studio adjuster | `scripts/GL2_fla/studioadjuster_756.as` |
+| On-stage character, chat, emote | `scripts/chara.as`, `scripts/chata.as`, `scripts/emotea.as` |
+| ID index | `symbolClass/symbols.csv` |
+
+Root timeline labels include `loaddata`, `title`, `load`, `home`, `gacha`, `gachaani`, `collection`, `life`, `featuredchars`, and `studio`.
+
+## Scope
+
+- There is no `.fla` in this archive. Most clip classes are library items (`[Embed]`, children, `stop()`). Game flow lives in `MainTimeline`.
+- `scripts/_assets/assets.swf` exceeds GitHub’s recommended file size and must remain in place for embed metadata.
+- Runtime copy is often assigned in ActionScript; files under `texts/` are tag payloads, not the string table.
+
+## Scale
+
+| Path | Approximate size |
+| --- | --- |
+| `sprites/` | ~6 GB |
+| `shapes/` | ~1 GB |
+| `scripts/` | ~90 MB (including `assets.swf`) |
 | `images/` | ~86 MB |
-| Rest | fonts, sounds, texts, frames |
 
-GitHub warns on `scripts/_assets/assets.swf` (over 50 MB). That file is required by `[Embed(source="/_assets/assets.swf", symbol="…")]` on clip classes.
+History is split across many commits so GitHub can accept the upload. The working tree at `HEAD` is the complete export.
 
----
+## Handling
 
-## What this is not
-
-- Not a rebuildable Adobe Animate / Flash Builder project (no `.fla`, no `.as3proj`).
-- Not minified web JS. Logic is AS3 timeline + MovieClip scripts.
-- Clip class bodies are often empty besides `addFrameScript` / `stop()`; real behavior is parent-driven from `MainTimeline`.
+Do not reorganize `scripts/`, `sprites/`, or `symbolClass/symbols.csv`. Restrict searches to `scripts/` until you have a character ID. See [NOTICE](NOTICE) for copyright.
