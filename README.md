@@ -1,9 +1,5 @@
 # Gacha Life 2 — internal source archive
 
-**Classification:** Lunime confidential  
-**Access:** Authorized staff and contractors only  
-**Status:** Private GitHub repository — do not fork, mirror, or redistribute
-
 This tree is a **decompiler export** of the shipped Adobe AIR / Flash SWF (JPEXS / FFDec layout). It is maintained for engineering review, tooling, and historical reference. It is **not** an Adobe Animate project and cannot be published with File → Publish.
 
 Keep the folder layout. Numeric names are SWF **character IDs**, not feature numbers. Renaming or collapsing directories (especially `sprites/`) breaks the mapping between scripts, embeds, and art.
